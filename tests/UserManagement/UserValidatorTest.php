@@ -1,12 +1,12 @@
 <?php
 
-namespace StackSite\Tests;
+namespace StackSite\Tests\UserManagement;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use StackSite\UserManagement\User;
-use StackSite\UserManagement\UserValidator;
 use StackSite\UserManagement\UserPersistence;
+use StackSite\UserManagement\UserValidator;
 
 class UserValidatorTest extends TestCase
 {
