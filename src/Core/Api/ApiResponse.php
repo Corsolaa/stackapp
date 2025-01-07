@@ -31,4 +31,14 @@ class ApiResponse
     {
         return json_encode($this->toArray(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
+
+    public function getSuccess(): bool
+    {
+        return $this->success;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
 }
