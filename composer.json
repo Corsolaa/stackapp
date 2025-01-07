@@ -1,0 +1,17 @@
+{
+  "autoload": {
+    "psr-4": {
+      "StackSite\\": "src/",
+      "StackSite\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "minishlink/web-push": "^9.0",
+    "ext-mysqli": "*",
+    "phpmailer/phpmailer": "^6.9",
+    "vlucas/phpdotenv": "^5.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  }
+}
