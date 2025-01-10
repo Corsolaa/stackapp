@@ -1,35 +1,37 @@
 <?php
 
-namespace StackSite\Tests\UserManagement;
+declare(strict_types=1);
 
+namespace StackSite\Tests\UserManagement\Services;
+
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use StackSite\Core\Api\ApiResponse;
+use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Token\Token;
 use StackSite\UserManagement\Token\TokenFactory;
 use StackSite\UserManagement\Token\UserTokenService;
 use StackSite\UserManagement\User;
 use StackSite\UserManagement\UserPersistence;
-use StackSite\UserManagement\UserRegistrationService;
 use StackSite\UserManagement\UserValidator;
 
 class UserRegistrationServiceTest extends TestCase
 {
-    private UserValidator $userValidator;
-    private UserPersistence $userPersistence;
-    private TokenFactory $tokenFactory;
-    private UserTokenService $userTokenService;
+    private UserValidator&MockObject $userValidator;
+    private TokenFactory&MockObject $tokenFactory;
+    private UserTokenService&MockObject $userTokenService;
     private UserRegistrationService $userRegistrationService;
 
     public function setUp(): void
     {
         $this->userValidator = $this->createMock(UserValidator::class);
-        $this->userPersistence = $this->createMock(UserPersistence::class);
-        $this->tokenFactory = $this->createMock(TokenFactory::class);
+        $userPersistence     = $this->createMock(UserPersistence::class);
+        $this->tokenFactory  = $this->createMock(TokenFactory::class);
         $this->userTokenService = $this->createMock(UserTokenService::class);
 
         $this->userRegistrationService = new UserRegistrationService(
             $this->userValidator,
-            $this->userPersistence,
+            $userPersistence,
             $this->tokenFactory,
             $this->userTokenService
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\Tests\UserManagement;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -11,14 +13,13 @@ use StackSite\UserManagement\UserValidator;
 class UserValidatorTest extends TestCase
 {
     private UserValidator $userValidator;
-    private MockObject|UserPersistence $userPersistence;
+    private UserPersistence&MockObject $userPersistence;
 
     public function setUp(): void
     {
         $this->userPersistence = $this->createMock(UserPersistence::class);
-
         $this->userValidator = new UserValidator($this->userPersistence);
-        $this->userValidator->setUser(new User);
+
         parent::setUp();
     }
 
@@ -31,7 +32,7 @@ class UserValidatorTest extends TestCase
             ->method('fetchByUsername')
             ->willReturn(null);
 
-        $result = $this->userValidator->userIsKnown();
+        $result = $this->userValidator->userIsKnown(new User);
 
         $this->assertFalse($result);
         $this->assertCount(0, $this->userValidator->getErrors());
@@ -46,7 +47,7 @@ class UserValidatorTest extends TestCase
             ->method('fetchByUsername')
             ->willReturn(new User);
 
-        $result = $this->userValidator->userIsKnown();
+        $result = $this->userValidator->userIsKnown(new User);
 
         $this->assertTrue($result);
         $this->assertCount(1, $this->userValidator->getErrors());
@@ -62,7 +63,7 @@ class UserValidatorTest extends TestCase
             ->method('fetchByUsername')
             ->willReturn(null);
 
-        $result = $this->userValidator->userIsKnown();
+        $result = $this->userValidator->userIsKnown(new User);
 
         $this->assertTrue($result);
         $this->assertCount(1, $this->userValidator->getErrors());
@@ -78,7 +79,7 @@ class UserValidatorTest extends TestCase
             ->method('fetchByUsername')
             ->willReturn(new User);
 
-        $result = $this->userValidator->userIsKnown();
+        $result = $this->userValidator->userIsKnown(new User);
 
         $this->assertTrue($result);
         $this->assertCount(2, $this->userValidator->getErrors());
@@ -95,9 +96,7 @@ class UserValidatorTest extends TestCase
             password: 'ValidPassword123!'
         );
 
-        $this->userValidator->setUser($user);
-
-        $this->assertFalse($this->userValidator->hasValidParameters());
+        $this->assertTrue($this->userValidator->hasValidParameters($user));
         $this->assertEmpty($this->userValidator->getErrors());
     }
 
@@ -109,9 +108,7 @@ class UserValidatorTest extends TestCase
             password: 'ValidPassword123!'
         );
 
-        $this->userValidator->setUser($user);
-
-        $this->assertTrue($this->userValidator->hasValidParameters());
+        $this->assertFalse($this->userValidator->hasValidParameters($user));
         $this->assertContains(UserValidator::ERROR_EMAIL, $this->userValidator->getErrors());
     }
 
@@ -123,9 +120,7 @@ class UserValidatorTest extends TestCase
             password: 'ValidPassword123!'
         );
 
-        $this->userValidator->setUser($user);
-
-        $this->assertTrue($this->userValidator->hasValidParameters());
+        $this->assertFalse($this->userValidator->hasValidParameters($user));
         $this->assertContains(UserValidator::ERROR_USERNAME, $this->userValidator->getErrors());
     }
 
@@ -137,9 +132,7 @@ class UserValidatorTest extends TestCase
             password: ''
         );
 
-        $this->userValidator->setUser($user);
-
-        $this->assertTrue($this->userValidator->hasValidParameters());
+        $this->assertFalse($this->userValidator->hasValidParameters($user));
         $this->assertContains(UserValidator::ERROR_PASSWORD, $this->userValidator->getErrors());
     }
 
@@ -151,9 +144,7 @@ class UserValidatorTest extends TestCase
             password: ''
         );
 
-        $this->userValidator->setUser($user);
-
-        $this->assertTrue($this->userValidator->hasValidParameters());
+        $this->assertFalse($this->userValidator->hasValidParameters($user));
         $this->assertCount(3, $this->userValidator->getErrors());
         $this->assertContains(UserValidator::ERROR_EMAIL, $this->userValidator->getErrors());
         $this->assertContains(UserValidator::ERROR_USERNAME, $this->userValidator->getErrors());

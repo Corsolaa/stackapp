@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\UserManagement;
 
 class User
 {
     public function __construct(
-        private ?int $id = null,
-        private string $username = '',
-        private string $email = '',
-        private string $password = '',
-        private ?int $createdAt = null,
-        private ?int $modifiedAt = null
-    )
-    {
+        private ?int            $id = null,
+        private string          $username = '',
+        private readonly string $email = '',
+        private string          $password = '',
+        private bool            $confirmed = false,
+        private readonly ?int   $createdAt = null,
+        private readonly ?int   $modifiedAt = null
+    ) {
     }
 
     public function getId(): ?int
@@ -39,6 +41,17 @@ class User
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed($confirmed): self
+    {
+        $this->confirmed = $confirmed;
+        return $this;
     }
 
     public function getCreatedAt(): ?int

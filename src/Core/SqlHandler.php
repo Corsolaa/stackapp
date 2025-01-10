@@ -60,7 +60,12 @@ class SqlHandler
     {
         self::createSql();
 
-        $result = self::$mysqli->query($query);
+        try {
+            $result = self::$mysqli->query($query);
+        } catch (\Exception) {
+            self::exception($query);
+            return [];
+        }
 
         if ($result === false) {
             self::exception($query);

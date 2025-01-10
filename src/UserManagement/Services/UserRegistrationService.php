@@ -1,19 +1,25 @@
 <?php
 
-namespace StackSite\UserManagement;
+declare(strict_types=1);
+
+namespace StackSite\UserManagement\Services;
 
 use StackSite\Core\Api\ApiResponse;
 use StackSite\UserManagement\Token\TokenFactory;
 use StackSite\UserManagement\Token\UserTokenService;
+use StackSite\UserManagement\User;
+use StackSite\UserManagement\UserPersistence;
+use StackSite\UserManagement\UserValidator;
 
 readonly class UserRegistrationService
 {
     public function __construct(
-        private UserValidator        $userValidator,
-        private UserPersistence      $userPersistence,
-        private TokenFactory         $tokenFactory,
-        private UserTokenService     $userTokenService,
-    ) {}
+        private UserValidator    $userValidator,
+        private UserPersistence  $userPersistence,
+        private TokenFactory     $tokenFactory,
+        private UserTokenService $userTokenService,
+    ) {
+    }
 
     public function registerUser(User $user): ApiResponse
     {

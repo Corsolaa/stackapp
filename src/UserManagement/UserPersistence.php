@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\UserManagement;
 
 use StackSite\Core\SqlHandler;
+use StackSite\UserManagement\Factories\UserFactory;
 
 class UserPersistence
 {
@@ -14,7 +17,7 @@ class UserPersistence
             "INSERT INTO users (
                    username,
                    email,
-                   password_hash,
+                   password,
                    created_at
                    )
             VALUES (
@@ -63,15 +66,23 @@ class UserPersistence
         return !empty($result) ? UserFactory::fromArray($result[0]) : null;
     }
 
-    public function fetchByUserId(int $userId): ?User
+    public function fetchByUserId(int $user_id): ?User
     {
         $query = "SELECT * FROM users
-                    WHERE userId = '" . SqlHandler::cleanString($userId) . "' 
+                    WHERE id = '" . $user_id . "' 
                     LIMIT 1";
 
         $result = SqlHandler::fetch($query);
 
         return !empty($result) ? UserFactory::fromArray($result[0]) : null;
+    }
+
+    public function confirmUser(): bool
+    {
+        $query = "UPDATE users SET confirmed = 1 WHERE id = " . $this->user->getId();
+        $result = SqlHandler::update($query);
+
+        return $result > 0;
     }
 
     public function setUser(User $user): self

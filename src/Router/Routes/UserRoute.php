@@ -4,8 +4,8 @@ namespace StackSite\Router\Routes;
 
 use StackSite\Core\Mailing\EmailHandler;
 use StackSite\Router\Route;
+use StackSite\UserManagement\Factories\UserControllerFactory;
 use StackSite\UserManagement\Token\Mailing\VerifyTokenMailingService;
-use StackSite\UserManagement\UserControllerFactory;
 
 class UserRoute extends Route
 {
@@ -25,6 +25,12 @@ class UserRoute extends Route
 
         if (isset($_GET['register'])) {
             echo $userController->registerUser()
+                ->toJson();
+            return;
+        }
+
+        if (isset($_GET['verify'])) {
+            echo $userController->verifyUser()
                 ->toJson();
             return;
         }

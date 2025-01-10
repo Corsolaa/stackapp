@@ -34,4 +34,16 @@ class TokenFactory
             return null;
         }
     }
+
+    public function fromArray(array $data): Token
+    {
+        return new Token(
+            $data['id'] ?? null,
+            $data['user_id'] ?? '',
+            $data['token'] ?? '',
+            $data['type'] ?? '',
+            $data['expires_at'] ?? null,
+            $data['created_at'] ?? null
+        );
+    }
 }
