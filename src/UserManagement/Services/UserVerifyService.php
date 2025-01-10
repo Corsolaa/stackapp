@@ -42,6 +42,8 @@ readonly class UserVerifyService
             return false;
         }
 
+        // TODO send verify successfully email
+
         return true;
     }
 }
