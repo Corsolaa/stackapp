@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StackSite\UserManagement\Factories;
 
 use StackSite\Core\RequestBodyHandler;
+use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
@@ -23,21 +24,31 @@ class UserControllerFactory
         $userPersistence = new UserPersistence();
         $tokenFactory = new TokenFactory();
         $tokenPersistence = new TokenPersistence($tokenFactory);
-
         $userValidator = new UserValidator($userPersistence);
         $userTokenService = new UserTokenService($tokenPersistence, $tokenMailingService);
+
         $userRegistrationService = new UserRegistrationService(
             $userValidator,
             $userPersistence,
             $tokenFactory,
             $userTokenService
         );
-
+        $userLoginService = new UserLoginService(
+            $userValidator,
+            $userPersistence,
+            $tokenFactory,
+            $userTokenService
+        );
         $userVerifyService = new UserVerifyService(
             $tokenPersistence,
             $userPersistence
         );
 
-        return new UserController($requestBodyHandler, $userRegistrationService, $userVerifyService);
+        return new UserController(
+            $requestBodyHandler,
+            $userRegistrationService,
+            $userVerifyService,
+            $userLoginService
+        );
     }
 }

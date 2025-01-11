@@ -41,4 +41,14 @@ class ApiResponse
     {
         return $this->message;
     }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
 }

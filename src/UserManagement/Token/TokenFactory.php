@@ -35,6 +35,21 @@ class TokenFactory
         }
     }
 
+    public function generateLoginUser(int $userId): ?Token
+    {
+        try {
+            return new Token(
+                null,
+                $userId,
+                bin2hex(random_bytes(16)),
+                TOKEN::LOGIN,
+                0
+            );
+        } catch (RandomException) {
+            return null;
+        }
+    }
+
     public function fromArray(array $data): Token
     {
         return new Token(

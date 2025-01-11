@@ -58,6 +58,18 @@ class UserValidator
         return empty($this->errors);
     }
 
+    public function hasValidEmail(string $email): bool
+    {
+        if (
+            $email === '' ||
+            filter_var($email, FILTER_VALIDATE_EMAIL) === false
+        ) {
+            $this->errors[] = self::ERROR_EMAIL;
+        }
+
+        return empty($this->errors);
+    }
+
     public function getErrors(): array
     {
         return $this->errors;

@@ -6,6 +6,7 @@ class Token
 {
     const string VERIFY = 'verify_user';
     const string PASSWORD = 'password_reset';
+    const string LOGIN = 'login_user';
 
     public function __construct(
         private readonly ?int   $id = null,

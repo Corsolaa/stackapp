@@ -56,7 +56,7 @@ class UserRegistrationServiceTest extends TestCase
             ->willReturn($this->createMock(Token::class));
 
         $this->userTokenService
-            ->method('processUserToken')
+            ->method('processUserVerifyToken')
             ->willReturn(true);
 
         $response = $this->userRegistrationService->registerUser($user);
@@ -140,7 +140,7 @@ class UserRegistrationServiceTest extends TestCase
             ->willReturn($this->createMock(Token::class));
 
         $this->userTokenService
-            ->method('processUserToken')
+            ->method('processUserVerifyToken')
             ->willReturn(false);
 
         $response = $this->userRegistrationService->registerUser($user);

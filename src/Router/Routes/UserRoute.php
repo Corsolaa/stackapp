@@ -35,6 +35,12 @@ class UserRoute extends Route
             return;
         }
 
+        if (isset($_GET['login'])) {
+            echo $userController->loginUser()
+                ->toJson();
+            return;
+        }
+
         echo $this->showPreviewPage();
     }
 

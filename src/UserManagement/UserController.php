@@ -7,6 +7,7 @@ namespace StackSite\UserManagement;
 use StackSite\Core\Api\ApiResponse;
 use StackSite\Core\RequestBodyHandler;
 use StackSite\UserManagement\Factories\UserFactory;
+use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Token;
@@ -17,8 +18,8 @@ readonly class UserController
         private RequestBodyHandler      $requestBody,
         private UserRegistrationService $userRegistrationService,
         private UserVerifyService       $userVerifyService,
-    )
-    {
+        private UserLoginService        $userLoginService,
+    ) {
     }
 
     public function registerUser(): ApiResponse
@@ -31,7 +32,7 @@ readonly class UserController
     {
         $token = new Token(
             token: $_GET['verify'] ?? '',
-            type: Token::VERIFY
+            type:  Token::VERIFY
         );
 
         if ($this->userVerifyService->verifyUser($token)) {
@@ -39,5 +40,13 @@ readonly class UserController
         } else {
             return new ApiResponse(false, 'Invalid token presented');
         }
+    }
+
+    public function loginUser(): ApiResponse
+    {
+        $email    = $this->requestBody->get('email');
+        $password = $this->requestBody->get('password');
+
+        return $this->userLoginService->loginUser($email, $password);
     }
 }

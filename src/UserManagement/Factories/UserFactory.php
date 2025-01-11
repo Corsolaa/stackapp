@@ -11,14 +11,15 @@ class UserFactory
     public static function fromArray(array $data): User
     {
         return new User(
-            (int)$data['id'] ?? null,
+            isset($data['id']) ? (int)$data['id'] : null,
             $data['username'] ?? '',
             $data['email'] ?? '',
             $data['password'] ?? '',
-            (bool)$data['confirmed'] ?? false,
+            isset($data['confirmed']) && $data['confirmed'],
             $data['createdAt'] ?? null,
             $data['modifiedAt'] ?? null
         );
+
     }
 
 }

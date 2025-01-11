@@ -45,7 +45,7 @@ readonly class UserRegistrationService
             return new ApiResponse(false, 'Token generation failed');
         }
 
-        if ($this->userTokenService->processUserToken($user, $token)) {
+        if ($this->userTokenService->processUserVerifyToken($user, $token)) {
             return new ApiResponse(true, 'User registered successfully');
         } else {
             return new ApiResponse(false, 'Mail could not be sent');
