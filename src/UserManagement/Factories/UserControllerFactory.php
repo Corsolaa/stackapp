@@ -7,6 +7,7 @@ namespace StackSite\UserManagement\Factories;
 use StackSite\Core\RequestBodyHandler;
 use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
+use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
 use StackSite\UserManagement\Token\TokenFactory;
@@ -43,12 +44,19 @@ class UserControllerFactory
             $tokenPersistence,
             $userPersistence
         );
+        $userResetPasswordService = new UserResetPasswordService(
+            $userValidator,
+            $userPersistence,
+            $tokenFactory,
+            $userTokenService
+        );
 
         return new UserController(
             $requestBodyHandler,
             $userRegistrationService,
             $userVerifyService,
-            $userLoginService
+            $userLoginService,
+            $userResetPasswordService
         );
     }
 }

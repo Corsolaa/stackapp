@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\UserManagement\Token;
 
 use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
@@ -27,5 +29,14 @@ readonly class UserTokenService
         $result = $this->tokenPersistence->setToken($token)
             ->upload();
         return $result > 0;
+    }
+
+    public function processUserPasswordResetToken(User $user, Token $token): bool
+    {
+        $this->tokenPersistence
+            ->setToken($token)
+            ->upload();
+
+        return $this->tokenMailingService->send($token, $user->getEmail());
     }
 }

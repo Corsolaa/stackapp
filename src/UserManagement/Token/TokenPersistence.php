@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\UserManagement\Token;
 
 use StackSite\Core\SqlHandler;
@@ -23,10 +25,10 @@ class TokenPersistence {
                    created_at
                    ) 
                   VALUES (
-                          '" . SqlHandler::cleanString($this->token->getUserId()) . "',
+                          '" . $this->token->getUserId() . "',
                           '" . SqlHandler::cleanString($this->token->getToken()) . "',
                           '" . SqlHandler::cleanString($this->token->getType()) . "',
-                          '" . SqlHandler::cleanString($this->token->getExpiresAt()) . "',
+                          '" . $this->token->getExpiresAt() . "',
                           " . time() . "
                           )";
 

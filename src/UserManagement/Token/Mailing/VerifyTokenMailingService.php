@@ -11,8 +11,7 @@ class VerifyTokenMailingService extends TokenMailingServiceInterface
 {
     public function __construct(
         private readonly EmailHandler $emailHandler
-    )
-    {
+    ) {
     }
 
     public function send(Token $token, string $email): bool

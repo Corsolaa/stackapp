@@ -28,8 +28,7 @@ readonly class UserRegistrationService
         }
 
         if ($this->userValidator->userIsKnown($user)) {
-            return new ApiResponse(false, 'User already exists', $this->userValidator->getErrors()
-            );
+            return new ApiResponse(false, 'User already exists', $this->userValidator->getErrors());
         }
 
         $user->sanitizeUsername();

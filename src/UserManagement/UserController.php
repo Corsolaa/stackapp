@@ -9,16 +9,18 @@ use StackSite\Core\RequestBodyHandler;
 use StackSite\UserManagement\Factories\UserFactory;
 use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
+use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Token;
 
 readonly class UserController
 {
     public function __construct(
-        private RequestBodyHandler      $requestBody,
-        private UserRegistrationService $userRegistrationService,
-        private UserVerifyService       $userVerifyService,
-        private UserLoginService        $userLoginService,
+        private RequestBodyHandler       $requestBody,
+        private UserRegistrationService  $userRegistrationService,
+        private UserVerifyService        $userVerifyService,
+        private UserLoginService         $userLoginService,
+        private UserResetPasswordService $userResetPasswordService,
     ) {
     }
 
@@ -48,5 +50,14 @@ readonly class UserController
         $password = $this->requestBody->get('password');
 
         return $this->userLoginService->loginUser($email, $password);
+    }
+
+    public function passwordResetUser(): ApiResponse
+    {
+        $email = $this->requestBody->get('email');
+
+        $this->userResetPasswordService->resetUserPassword((string)$email);
+
+        return new ApiResponse(true, 'Password reset successfully');
     }
 }
