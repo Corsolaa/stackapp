@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Token;
 use StackSite\UserManagement\Token\TokenPersistence;
+use StackSite\UserManagement\Token\UserTokenService;
 use StackSite\UserManagement\User;
 use StackSite\UserManagement\UserPersistence;
 
@@ -17,15 +18,19 @@ class UserVerifyServiceTest extends TestCase
     private UserVerifyService $userVerifyService;
     private TokenPersistence&MockObject $tokenPersistence;
     private UserPersistence&MockObject $userPersistence;
+    private UserTokenService&MockObject $userTokenService;
+
 
     public function setUp(): void
     {
         $this->tokenPersistence = $this->createMock(TokenPersistence::class);
         $this->userPersistence  = $this->createMock(UserPersistence::class);
+        $this->userTokenService = $this->createMock(UserTokenService::class);
 
         $this->userVerifyService = new UserVerifyService(
             $this->tokenPersistence,
-            $this->userPersistence
+            $this->userPersistence,
+            $this->userTokenService
         );
 
         parent::setUp();
@@ -45,7 +50,7 @@ class UserVerifyServiceTest extends TestCase
         $this->userPersistence->method('confirmUser')
             ->willReturn(true);
 
-        $this->tokenPersistence->method('deleteById')
+        $this->userTokenService->method('processUserConfirmToken')
             ->willReturn(true);
 
         $result = $this->userVerifyService->verifyUser($token);
@@ -123,7 +128,7 @@ class UserVerifyServiceTest extends TestCase
         $this->userPersistence->method('confirmUser')
             ->willReturn(true);
 
-        $this->tokenPersistence->method('deleteById')
+        $this->userTokenService->method('processUserConfirmToken')
             ->willReturn(false);
 
         $result = $this->userVerifyService->verifyUser(new Token);

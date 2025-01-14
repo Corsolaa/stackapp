@@ -6,28 +6,30 @@ namespace StackSite\UserManagement\Services;
 
 use StackSite\UserManagement\Token\Token;
 use StackSite\UserManagement\Token\TokenPersistence;
+use StackSite\UserManagement\Token\UserTokenService;
 use StackSite\UserManagement\UserPersistence;
 
 readonly class UserVerifyService
 {
     public function __construct(
         private TokenPersistence $tokenPersistence,
-        private UserPersistence  $userPersistence
+        private UserPersistence  $userPersistence,
+        private UserTokenService $userTokenService
     ) {
     }
 
-    public function verifyUser(Token $token): bool
+    public function verifyUser(Token $verifyToken): bool
     {
-        if ($token->getToken() === '') {
+        if ($verifyToken->getToken() === '') {
             return false;
         }
 
-        $token = $this->tokenPersistence->fetchByTokenAndType($token);
-        if ($token === null) {
+        $verifyToken = $this->tokenPersistence->fetchByTokenAndType($verifyToken);
+        if ($verifyToken === null) {
             return false;
         }
 
-        $user = $this->userPersistence->fetchByUserId($token->getUserId());
+        $user = $this->userPersistence->fetchByUserId($verifyToken->getUserId());
         if ($user === null) {
             return false;
         }
@@ -38,12 +40,6 @@ readonly class UserVerifyService
             return false;
         }
 
-        if ($this->tokenPersistence->deleteById($token->getId()) === false) {
-            return false;
-        }
-
-        // TODO send verify successfully email
-
-        return true;
+        return $this->userTokenService->processUserConfirmToken($user, $verifyToken);
     }
 }

@@ -55,12 +55,12 @@ class TokenFactory
     public function fromArray(array $data): Token
     {
         return new Token(
-            $data['id'] ?? null,
-            $data['user_id'] ?? '',
+            isset($data['id']) ? (int)$data['id'] : null,
+            isset($data['user_id']) ? (int)$data['user_id'] : null,
             $data['token'] ?? '',
             $data['type'] ?? '',
-            $data['expires_at'] ?? null,
-            $data['created_at'] ?? null
+            isset($data['expires_at']) ? (int)$data['expires_at'] : null,
+            isset($data['created_at']) ? (int)$data['created_at'] : null
         );
     }
 }

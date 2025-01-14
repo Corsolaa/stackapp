@@ -7,6 +7,7 @@ namespace StackSite\Router\Routes;
 use StackSite\Core\Mailing\EmailHandler;
 use StackSite\Router\Route;
 use StackSite\UserManagement\Factories\UserControllerFactory;
+use StackSite\UserManagement\Token\Mailing\ConfirmVerifyTokenMailingService;
 use StackSite\UserManagement\Token\Mailing\PasswordResetTokenMailingService;
 use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
 use StackSite\UserManagement\Token\Mailing\VerifyTokenMailingService;
@@ -62,6 +63,10 @@ class UserRoute extends Route
 
         if (isset($_GET['password_reset'])) {
             return new PasswordResetTokenMailingService($emailHandler);
+        }
+
+        if (isset($_GET['verify'])) {
+            return new ConfirmVerifyTokenMailingService($emailHandler);
         }
 
         return new VerifyTokenMailingService($emailHandler);

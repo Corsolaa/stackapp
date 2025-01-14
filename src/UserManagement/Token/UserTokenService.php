@@ -24,6 +24,14 @@ readonly class UserTokenService
         return $this->tokenMailingService->send($token, $user->getEmail());
     }
 
+    public function processUserConfirmToken(User $user, Token $token): bool
+    {
+        $this->tokenPersistence
+            ->deleteById($token->getId());
+
+        return $this->tokenMailingService->send($token, $user->getEmail());
+    }
+
     public function processUserLoginToken(Token $token): bool
     {
         $result = $this->tokenPersistence->setToken($token)

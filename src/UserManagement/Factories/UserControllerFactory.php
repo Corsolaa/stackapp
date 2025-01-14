@@ -42,7 +42,8 @@ class UserControllerFactory
         );
         $userVerifyService = new UserVerifyService(
             $tokenPersistence,
-            $userPersistence
+            $userPersistence,
+            $userTokenService
         );
         $userResetPasswordService = new UserResetPasswordService(
             $userValidator,
