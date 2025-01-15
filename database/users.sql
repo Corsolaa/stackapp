@@ -1,11 +1,18 @@
-CREATE TABLE users
+CREATE TABLE `users`
 (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    username      VARCHAR(50) NOT NULL,
-    email         VARCHAR(100) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT unique_email UNIQUE (email),
-    CONSTRAINT unique_username UNIQUE (username)
+    `id`          int          NOT NULL,
+    `username`    varchar(50)  NOT NULL,
+    `email`       varchar(100) NOT NULL,
+    `password`    VARCHAR(255) NOT NULL,
+    `confirmed`   tinyint(1)   NOT NULL DEFAULT '0',
+    `created_at`  int                   DEFAULT '0',
+    `modified_at` int                   DEFAULT '0'
 );
+
+ALTER TABLE `users`
+    ADD PRIMARY KEY (`id`),
+    ADD UNIQUE KEY `unique_email` (`email`),
+    ADD UNIQUE KEY `unique_username` (`username`);
+
+ALTER TABLE `users`
+    MODIFY `id` int NOT NULL AUTO_INCREMENT;

@@ -1,10 +1,16 @@
-CREATE TABLE push_subscriptions
+CREATE TABLE `push_subscriptions`
 (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    user_id    INT NOT NULL,
-    name       VARCHAR(255) NOT NULL,
-    endpoint   VARCHAR(500) NOT NULL,
-    p256dh     VARCHAR(255) NOT NULL,
-    auth       VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `id`         int          NOT NULL,
+    `user_id`    int          NOT NULL,
+    `name`       varchar(255) NOT NULL,
+    `endpoint`   varchar(500) NOT NULL,
+    `p256dh`     varchar(255) NOT NULL,
+    `auth`       varchar(255) NOT NULL,
+    `created_at` INT          NOT NULL
 );
+
+ALTER TABLE `push_subscriptions`
+    ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `push_subscriptions`
+    MODIFY `id` int NOT NULL AUTO_INCREMENT;

@@ -49,7 +49,7 @@ readonly class UserController
         $email    = $this->requestBody->get('email');
         $password = $this->requestBody->get('password');
 
-        return $this->userLoginService->loginUser($email, $password);
+        return $this->userLoginService->loginUser((string)$email, (string)$password);
     }
 
     public function passwordResetUser(): ApiResponse
