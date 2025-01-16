@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace StackSite\UserManagement\Factories;
 
+use StackSite\Core\Mailing\Template\EmailTemplateFactory;
+use StackSite\Core\Mailing\Template\EmailTemplateService;
+use StackSite\Core\Mailing\Template\TemplatePersistence;
+use StackSite\Core\Mailing\Template\TemplateRenderer;
 use StackSite\Core\RequestBodyHandler;
 use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
@@ -24,9 +28,16 @@ class UserControllerFactory
         $requestBodyHandler = new RequestBodyHandler();
         $userPersistence = new UserPersistence();
         $tokenFactory = new TokenFactory();
+        $emailTemplateService = new EmailTemplateService(
+            new TemplateRenderer(),
+            new TemplatePersistence(
+                new EmailTemplateFactory()
+            )
+        );
+
         $tokenPersistence = new TokenPersistence($tokenFactory);
         $userValidator = new UserValidator($userPersistence);
-        $userTokenService = new UserTokenService($tokenPersistence, $tokenMailingService);
+        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService, $tokenMailingService);
 
         $userRegistrationService = new UserRegistrationService(
             $userValidator,
