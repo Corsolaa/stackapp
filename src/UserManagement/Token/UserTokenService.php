@@ -7,7 +7,6 @@ namespace StackSite\UserManagement\Token;
 use StackSite\Core\Exceptions\TemplateNotFoundException;
 use StackSite\Core\Mailing\EmailHandler;
 use StackSite\Core\Mailing\Template\EmailTemplateService;
-use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
 use StackSite\UserManagement\User;
 
 readonly class UserTokenService
@@ -16,8 +15,7 @@ readonly class UserTokenService
 
     public function __construct(
         private TokenPersistence             $tokenPersistence,
-        private EmailTemplateService         $emailTemplateService,
-        private TokenMailingServiceInterface $tokenMailingService,
+        private EmailTemplateService         $emailTemplateService
     ) {
         $this->emailHandler = new EmailHandler($_ENV['NOREPLY_MAILADRES'], $_ENV['NOREPLY_FROM_NAME']);
     }
@@ -29,9 +27,9 @@ readonly class UserTokenService
             ->upload();
 
         try {
-            $body = $this->emailTemplateService->renderTemplateByName(
+            $template = $this->emailTemplateService->renderTemplateByName(
                 'user_verify_token',
-                ['TOKEN' => $token->getToken(),]
+                ['TOKEN' => $token->getToken()]
             );
         } catch (TemplateNotFoundException) {
             return false;
@@ -39,7 +37,7 @@ readonly class UserTokenService
 
         $this->emailHandler->setRecipient($user->getEmail());
 
-        return $this->emailHandler->send('Verify your StackSats account!', $body);
+        return $this->emailHandler->send($template->getSubject(), $template->getContent());
     }
 
     public function processUserConfirmToken(User $user, Token $token): bool
@@ -47,7 +45,15 @@ readonly class UserTokenService
         $this->tokenPersistence
             ->deleteById($token->getId());
 
-        return $this->tokenMailingService->send($token, $user->getEmail());
+        try {
+            $template = $this->emailTemplateService->renderTemplateByName('user_verify_success');
+        } catch (TemplateNotFoundException) {
+            return false;
+        }
+
+        $this->emailHandler->setRecipient($user->getEmail());
+
+        return $this->emailHandler->send($template->getSubject(), $template->getContent());
     }
 
     public function processUserLoginToken(Token $token): bool
@@ -63,6 +69,17 @@ readonly class UserTokenService
             ->setToken($token)
             ->upload();
 
-        return $this->tokenMailingService->send($token, $user->getEmail());
+        try {
+            $template = $this->emailTemplateService->renderTemplateByName(
+                'user_password_reset',
+                ['TOKEN' => $token->getToken()]
+            );
+        } catch (TemplateNotFoundException) {
+            return false;
+        }
+
+        $this->emailHandler->setRecipient($user->getEmail());
+
+        return $this->emailHandler->send($template->getSubject(), $template->getContent());
     }
 }

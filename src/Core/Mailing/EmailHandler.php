@@ -11,7 +11,7 @@ class EmailHandler
 {
     private PHPMailer $mail;
 
-    public function __construct($from, $fromName)
+    public function __construct(string $from, string $fromName)
     {
         $this->mail             = new PHPMailer(true);
         $this->mail->Host       = $_ENV['SMTP_HOST'] || "localhost";
@@ -37,7 +37,7 @@ class EmailHandler
         }
     }
 
-    function send($subject, $body): bool
+    function send(string $subject, string $body): bool
     {
         $this->mail->Subject = $subject;
         $this->mail->Body    = $body;

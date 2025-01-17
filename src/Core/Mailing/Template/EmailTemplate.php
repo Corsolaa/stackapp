@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace StackSite\Core\Mailing\Template;
 
-readonly class EmailTemplate
+class EmailTemplate
 {
     public function __construct(
-        private ?int   $id = null,
-        private string $name = '',
-        private string $content = '',
-        private ?int   $created_at = null
+        private readonly ?int   $id = null,
+        private readonly string $name = '',
+        private readonly string $subject = '',
+        private string          $content = '',
+        private readonly ?int   $created_at = null
     ) {
     }
 
@@ -22,6 +23,18 @@ readonly class EmailTemplate
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSubject(): string
+    {
+        return $this->subject;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
     }
 
     public function getContent(): string

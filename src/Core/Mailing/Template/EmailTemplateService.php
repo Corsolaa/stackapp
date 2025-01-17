@@ -17,7 +17,7 @@ readonly class EmailTemplateService
     /**
      * @throws TemplateNotFoundException
      */
-    public function renderTemplateByName(string $name, array $variables): string
+    public function renderTemplateByName(string $name, array $variables = []): EmailTemplate
     {
         $template = $this->templatePersistence->fetchTemplateByName($name);
 
@@ -25,6 +25,6 @@ readonly class EmailTemplateService
             throw new TemplateNotFoundException($name);
         }
 
-        return $this->templateRenderer->render($template->getContent(), $variables);
+        return $template->setContent($this->templateRenderer->render($template->getContent(), $variables));
     }
 }
