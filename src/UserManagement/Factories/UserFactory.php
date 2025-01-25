@@ -16,8 +16,8 @@ class UserFactory
             $data['email'] ?? '',
             $data['password'] ?? '',
             isset($data['confirmed']) && $data['confirmed'],
-            $data['createdAt'] ?? null,
-            $data['modifiedAt'] ?? null
+            isset($data['created_at']) ? (int)$data['created_at'] : null,
+            isset($data['modified_at']) ? (int)$data['modified_at'] : null,
         );
 
     }

@@ -14,6 +14,67 @@ $users           = $userPersistence->fetchAll();
 
 <div class="section">
     <div class="inner">
+        <h2>User center</h2>
+
+        <div class="user_register form">
+            <label for="email">
+                email:
+                <span>
+                    <input type="text" id="email">
+                </span>
+            </label>
+
+            <label for="username">
+                username:
+                <span>
+                    <input type="text" id="username">
+                </span>
+            </label>
+
+            <label for="password">
+                password:
+                <span class="password">
+                    <input type="password" id="name">
+                    <span class="password_eye" onclick="password_eye(this)">👁️</span>
+                </span>
+            </label>
+
+            <button onclick="register_user(this)">Save device</button>
+        </div>
+
+        <br>
+
+        <table>
+            <tr>
+                <th>id</th>
+                <th>username</th>
+                <th>email</th>
+                <th>password</th>
+                <th>confirmed</th>
+                <th>created_at</th>
+                <th>modified_at</th>
+            </tr>
+
+            <?php
+            foreach ($users as $user) { ?>
+                <tr>
+                    <td><?php echo $user->getId() ?></td>
+                    <td><?php echo $user->getUsername() ?></td>
+                    <td><?php echo $user->getEmail() ?></td>
+                    <td>********</td>
+                    <td><?php echo $user->getConfirmed() ?></td>
+                    <td><?php echo date("Y-m-d H:i:s", $user->getCreatedAt()) ?></td>
+                    <td><?php echo date("Y-m-d H:i:s", $user->getModifiedAt()) ?></td>
+                </tr>
+            <?php } ?>
+
+
+        </table>
+    </div>
+</div>
+
+<div class="section">
+    <div class="inner">
         <h2>Notification center</h2>
 
         <div class="notification_create">
