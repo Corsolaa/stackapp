@@ -85,6 +85,15 @@ class UserPersistence
         return $result > 0;
     }
 
+    public function updatePassword(): bool
+    {
+        $query = "UPDATE users SET password = " . SqlHandler::cleanString($this->user->getPassword()) .
+            " WHERE id = " . $this->user->getId();
+        $result = SqlHandler::update($query);
+
+        return $result > 0;
+    }
+
     public function setUser(User $user): self
     {
         $this->user = $user;

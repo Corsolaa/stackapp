@@ -38,6 +38,12 @@ class User
         return $this->email;
     }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;

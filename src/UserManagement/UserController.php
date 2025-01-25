@@ -20,7 +20,7 @@ readonly class UserController
         private UserRegistrationService  $userRegistrationService,
         private UserVerifyService        $userVerifyService,
         private UserLoginService         $userLoginService,
-        private UserResetPasswordService $userResetPasswordService,
+        private UserResetPasswordService $userResetPasswordService
     ) {
     }
 
@@ -52,12 +52,23 @@ readonly class UserController
         return $this->userLoginService->loginUser((string)$email, (string)$password);
     }
 
-    public function passwordResetUser(): ApiResponse
+    public function sendPasswordReset(): ApiResponse
     {
         $email = $this->requestBody->get('email');
 
-        $this->userResetPasswordService->resetUserPassword((string)$email);
+        $this->userResetPasswordService->sendResetPassword((string)$email);
 
         return new ApiResponse(true, 'Password reset successfully');
+    }
+
+    public function verifyPasswordReset(): ApiResponse
+    {
+        $tokenToken    = $this->requestBody->get('token');
+        $password = $this->requestBody->get('password');
+
+        return $this->userResetPasswordService->processResetPasswordToken(
+            (string)$tokenToken,
+            (string)$password
+        );
     }
 }

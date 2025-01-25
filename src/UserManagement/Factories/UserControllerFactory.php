@@ -13,9 +13,10 @@ use StackSite\UserManagement\Services\UserLoginService;
 use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Services\UserVerifyService;
-use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
 use StackSite\UserManagement\Token\TokenFactory;
+use StackSite\UserManagement\Token\TokenManager;
 use StackSite\UserManagement\Token\TokenPersistence;
+use StackSite\UserManagement\Token\TokenValidator;
 use StackSite\UserManagement\Token\UserTokenService;
 use StackSite\UserManagement\UserController;
 use StackSite\UserManagement\UserPersistence;
@@ -23,11 +24,12 @@ use StackSite\UserManagement\UserValidator;
 
 class UserControllerFactory
 {
-    public static function create(TokenMailingServiceInterface $tokenMailingService): UserController
+    public static function create(): UserController
     {
         $requestBodyHandler = new RequestBodyHandler();
         $userPersistence = new UserPersistence();
         $tokenFactory = new TokenFactory();
+        $tokenValidator = new TokenValidator();
         $emailTemplateService = new EmailTemplateService(
             new TemplateRenderer(),
             new TemplatePersistence(
@@ -37,7 +39,7 @@ class UserControllerFactory
 
         $tokenPersistence = new TokenPersistence($tokenFactory);
         $userValidator = new UserValidator($userPersistence);
-        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService, $tokenMailingService);
+        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService, $userPersistence);
 
         $userRegistrationService = new UserRegistrationService(
             $userValidator,
@@ -60,7 +62,10 @@ class UserControllerFactory
             $userValidator,
             $userPersistence,
             $tokenFactory,
-            $userTokenService
+            $userTokenService,
+            $tokenPersistence,
+            $tokenValidator,
+            new TokenManager($tokenPersistence, $tokenValidator)
         );
 
         return new UserController(

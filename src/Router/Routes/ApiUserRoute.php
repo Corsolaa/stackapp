@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace StackSite\Router\Routes;
 
-use StackSite\Core\Mailing\EmailHandler;
 use StackSite\Router\Route;
 use StackSite\UserManagement\Factories\UserControllerFactory;
-use StackSite\UserManagement\Token\Mailing\ConfirmVerifyTokenMailingService;
-use StackSite\UserManagement\Token\Mailing\PasswordResetTokenMailingService;
-use StackSite\UserManagement\Token\Mailing\TokenMailingServiceInterface;
-use StackSite\UserManagement\Token\Mailing\VerifyTokenMailingService;
 
-class UserRoute extends Route
+class ApiUserRoute extends Route
 {
 
     public function register(): void
     {
-        $this->router->add('/user', $this);
+        $this->router->add('/api/user', $this);
     }
 
     public function handle(): void
     {
-        $userController = UserControllerFactory::create($this->createTokenMailingService());
+        $userController = UserControllerFactory::create();
 
         if (isset($_GET['register'])) {
             echo $userController->registerUser()->toJson();
@@ -40,7 +35,12 @@ class UserRoute extends Route
         }
 
         if (isset($_GET['password_reset'])) {
-            echo $userController->passwordResetUser()->toJson();
+            echo $userController->sendPasswordReset()->toJson();
+            return;
+        }
+
+        if (isset($_GET['process_password_reset'])) {
+            echo $userController->verifyPasswordReset()->toJson();
             return;
         }
 
@@ -55,20 +55,5 @@ class UserRoute extends Route
             $return .= "<li><a href='/subscribe?$option'>https://app.stacksats.ai/subscribe?$option</a></li>";
         }
         return $return . "</ul>";
-    }
-
-    private function createTokenMailingService(): TokenMailingServiceInterface
-    {
-        $emailHandler = new EmailHandler($_ENV['NOREPLY_MAILADRES'], $_ENV['NOREPLY_FROM_NAME']);
-
-        if (isset($_GET['password_reset'])) {
-            return new PasswordResetTokenMailingService($emailHandler);
-        }
-
-        if (isset($_GET['verify'])) {
-            return new ConfirmVerifyTokenMailingService($emailHandler);
-        }
-
-        return new VerifyTokenMailingService($emailHandler);
     }
 }

@@ -14,8 +14,8 @@ readonly class UserTokenService
     private EmailHandler $emailHandler;
 
     public function __construct(
-        private TokenPersistence             $tokenPersistence,
-        private EmailTemplateService         $emailTemplateService
+        private TokenPersistence     $tokenPersistence,
+        private EmailTemplateService $emailTemplateService
     ) {
         $this->emailHandler = new EmailHandler($_ENV['NOREPLY_MAILADRES'], $_ENV['NOREPLY_FROM_NAME']);
     }
@@ -42,8 +42,7 @@ readonly class UserTokenService
 
     public function processUserConfirmToken(User $user, Token $token): bool
     {
-        $this->tokenPersistence
-            ->deleteById($token->getId());
+        $this->tokenPersistence->deleteById($token->getId());
 
         try {
             $template = $this->emailTemplateService->renderTemplateByName('user_verify_success');

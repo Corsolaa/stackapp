@@ -47,6 +47,18 @@ class TokenPersistence {
         return !empty($result) ? $this->tokenFactory->fromArray($result[0]) : null;
     }
 
+    public function fetchByUserIdAndType(int $userId, string $type): ?Token
+    {
+        $query = "SELECT * FROM token
+                    WHERE user_id = '" . $userId . "'
+                    AND type = '" . SqlHandler::cleanString($type) . "'
+                    LIMIT 1";
+
+        $result = SqlHandler::fetch($query);
+
+        return !empty($result) ? $this->tokenFactory->fromArray($result[0]) : null;
+    }
+
     public function deleteById(int $tokenId): bool
     {
         $query = "DELETE FROM token WHERE id = '" . $tokenId . "'";

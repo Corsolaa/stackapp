@@ -150,4 +150,20 @@ class UserValidatorTest extends TestCase
         $this->assertContains(UserValidator::ERROR_USERNAME, $this->userValidator->getErrors());
         $this->assertContains(UserValidator::ERROR_PASSWORD, $this->userValidator->getErrors());
     }
+
+    public function testHasValidPasswordIsValid(): void
+    {
+        $password = 'ValidPassword123!';
+
+        $this->assertTrue($this->userValidator->hasValidPassword($password));
+        $this->assertEmpty($this->userValidator->getErrors());
+    }
+
+    public function testHasValidPasswordIsInvalid(): void
+    {
+        $password = 'ValidPa';
+
+        $this->assertFalse($this->userValidator->hasValidPassword($password));
+        $this->assertContains(UserValidator::ERROR_PASSWORD, $this->userValidator->getErrors());
+    }
 }

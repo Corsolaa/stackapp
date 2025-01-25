@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace StackSite\UserManagement;
 
 class UserValidator
@@ -65,6 +67,19 @@ class UserValidator
             filter_var($email, FILTER_VALIDATE_EMAIL) === false
         ) {
             $this->errors[] = self::ERROR_EMAIL;
+        }
+
+        return empty($this->errors);
+    }
+
+    public function hasValidPassword(string $password): bool
+    {
+        if (
+            $password === '' ||
+            strlen($password) < 10 ||
+            strlen($password) > 64
+        ) {
+            $this->errors[] = self::ERROR_PASSWORD;
         }
 
         return empty($this->errors);
