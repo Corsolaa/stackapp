@@ -36,6 +36,9 @@ class Template
         </head>
 
         <body>
+        <div class="notification_center">
+            <div class="notification">This is a message</div>
+        </div>
     <?php }
 
     public static function getFooter(array $customJs = []): void

@@ -20,21 +20,21 @@ $users           = $userPersistence->fetchAll();
             <label for="email">
                 email:
                 <span>
-                    <input type="text" id="email">
+                    <input type="text" id="email" value="bruno.bouwman4@gmail.com">
                 </span>
             </label>
 
             <label for="username">
                 username:
                 <span>
-                    <input type="text" id="username">
+                    <input type="text" id="username" value="corsolaa">
                 </span>
             </label>
 
             <label for="password">
                 password:
                 <span class="password">
-                    <input type="password" id="password">
+                    <input type="password" id="password" value="brunoiscool">
                     <span class="password_eye" onclick="password_eye(this)">👁️</span>
                 </span>
             </label>
