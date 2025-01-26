@@ -45,6 +45,7 @@ class Template
 
         <script src="/assets/js/script.js"></script>
         <script src="/assets/js/util.js"></script>
+        <script src="/assets/js/notification.js"></script>
         <?php
         foreach ($customJs as $js) {
             echo '<script src="/assets/js/' . htmlspecialchars($js) . '"></script>';

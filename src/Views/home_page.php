@@ -34,7 +34,7 @@ $users           = $userPersistence->fetchAll();
             <label for="password">
                 password:
                 <span class="password">
-                    <input type="password" id="name">
+                    <input type="password" id="password">
                     <span class="password_eye" onclick="password_eye(this)">👁️</span>
                 </span>
             </label>

@@ -1,12 +1,10 @@
-
-
 function register_user(button) {
     const parentElement = button.parentElement;
 
     const requestBody = {
-        email: parentElement.querySelector("#email"),
-        username: parentElement.querySelector("#username"),
-        password: parentElement.querySelector("#password"),
+        email: parentElement.querySelector("#email").value,
+        username: parentElement.querySelector("#username").value,
+        password: parentElement.querySelector("#password").value,
     };
 
     console.log("Collected Data:", requestBody);
@@ -22,6 +20,6 @@ function register_user(button) {
             return response.json();
         })
         .then(result => {
-            console.log("Success:", result);
+            console.log("Result from Register API:", result);
         });
 }

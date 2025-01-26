@@ -54,6 +54,8 @@ label {
         }
 
         span {
+            user-select: none;
+            cursor: pointer;
             width: 25px;
             height: 25px;
         }
@@ -72,7 +74,10 @@ button {
     padding: 5px 15px;
     border: 2px solid #00445b;
     border-radius: 8px;
+
     color: #00445b;
     background: #b4ecff;
+    cursor: pointer;
+
     width: fit-content;
 }

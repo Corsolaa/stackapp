@@ -1,0 +1,7 @@
+function notificationBad() {
+
+}
+
+function notificationGood() {
+
+}
