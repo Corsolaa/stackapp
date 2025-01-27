@@ -37,7 +37,6 @@ class Template
 
         <body>
         <div class="notification_center">
-            <div class="notification">This is a message</div>
         </div>
     <?php }
 

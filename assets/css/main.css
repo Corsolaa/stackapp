@@ -81,3 +81,74 @@ button {
 
     width: fit-content;
 }
+
+.notification_center {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%);
+
+    width: 80vw;
+    max-width: 500px;
+
+    .notification {
+        position: relative;
+
+        color: #9b6500;
+        background: #feda9c;
+
+        padding: 5px 25px 5px 10px;
+        border-radius: 8px;
+        border: 2px solid #9b6500;
+
+        cursor: pointer;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .notification::before {
+        content: "×";
+        position: absolute;
+        top: -5px;
+        right: 5px;
+        font-size: 20px;
+        color: #9b6500;
+    }
+
+    .notification:hover {
+        transform: scale(1.05);
+    }
+
+    .notification.info {
+        color: #005c8f;
+        background: #d6f0fd;
+        border: 2px solid #005c8f;
+    }
+
+    .notification.info::before {
+        color: #005c8f !important;
+    }
+
+    .notification.good {
+        color: #096936;
+        background: #c3f4d7;
+        border: 2px solid #096936;
+    }
+
+    .notification.good::before {
+        color: #096936 !important;
+    }
+
+    .notification.bad {
+        color: #fa4e59;
+        background: #ffe0e3;
+        border: 2px solid #fa4e59;
+    }
+
+    .notification.bad::before {
+        color: #fa4e59 !important;
+    }
+}

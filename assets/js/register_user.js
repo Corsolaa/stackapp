@@ -20,6 +20,22 @@ function register_user(button) {
             return response.json();
         })
         .then(result => {
-            console.log("Result from Register API:", result);
+            processResult(result);
         });
+}
+
+function processResult(api_response) {
+    const keys_to_check = ['success', 'message'];
+
+    if (keys_to_check.every(key => Object.hasOwn(api_response, key)) === false) {
+        notificationBad(';( Wrong return type, contact support')
+        console.log(api_response);
+        return;
+    }
+
+    if (api_response['success']) {
+        notificationGood(api_response['message'])
+    } else {
+        notificationBad(api_response['message'])
+    }
 }
