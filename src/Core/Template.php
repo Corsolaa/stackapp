@@ -20,6 +20,7 @@ class Template
             <title><?php echo htmlspecialchars($pageTitle) ?></title>
 
             <link rel="stylesheet" href="/assets/css/main.css">
+            <link rel="stylesheet" href="/assets/css/animations.css">
             <?php
             foreach ($customCss as $css) {
                 echo '<link rel="stylesheet" href="/assets/css/' . htmlspecialchars($css) . '">';

@@ -13,3 +13,12 @@ function urlBase64ToUint8Array(base64String) {
 function openSendSiteNewTab() {
     window.open("https://app.stacksats.ai/subscribe?send", "_blank");
 }
+
+function shake(element) {
+    console.log(element);
+    element.classList.add('shake');
+
+    element.addEventListener('animationend', () => {
+        element.classList.remove('shake');
+    }, { once: true })
+}

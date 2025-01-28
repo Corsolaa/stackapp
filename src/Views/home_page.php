@@ -20,26 +20,45 @@ $users           = $userPersistence->fetchAll();
             <label for="email">
                 email:
                 <span>
-                    <input type="text" id="email" value="bruno.bouwman4@gmail.com">
+                    <input type="text" id="register_email" value="bruno.bouwman4@gmail.com">
                 </span>
             </label>
 
             <label for="username">
                 username:
                 <span>
-                    <input type="text" id="username" value="corsolaa">
+                    <input type="text" id="register_username" value="corsolaa">
                 </span>
             </label>
 
             <label for="password">
                 password:
                 <span class="password">
-                    <input type="password" id="password" value="brunoiscool">
+                    <input type="password" id="register_password" value="brunoiscool">
                     <span class="password_eye" onclick="password_eye(this)">👁️</span>
                 </span>
             </label>
 
-            <button onclick="register_user(this)">Save device</button>
+            <button class="hover_grow" onclick="register_user(this)">Register</button>
+        </div>
+
+        <div class="login form">
+            <label for="email">
+                email:
+                <span>
+                    <input type="text" id="login_email" value="bruno.bouwman4@gmail.com">
+                </span>
+            </label>
+
+            <label for="password">
+                password:
+                <span class="password">
+                    <input type="password" id="login_password" value="brunoiscool">
+                    <span class="password_eye" onclick="password_eye(this)">👁️</span>
+                </span>
+            </label>
+
+            <button class="hover_grow" onclick="login_user(this)">Login</button>
         </div>
 
         <br>
@@ -93,7 +112,7 @@ $users           = $userPersistence->fetchAll();
 
             <br>
 
-            <button onclick='registerServiceWorker(this)'>Save device</button>
+            <button class="hover_grow" onclick='registerServiceWorker(this)'>Save device</button>
         </div>
 
         <br>

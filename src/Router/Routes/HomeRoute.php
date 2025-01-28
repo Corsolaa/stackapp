@@ -18,6 +18,6 @@ class HomeRoute extends Route {
 
         require $_SERVER['DOCUMENT_ROOT'] . '/src/Views/home_page.php';
 
-        Template::getFooter(['register_user.js', 'form.js']);
+        Template::getFooter(['user_management/register_user.js', 'user_management/login_user.js', 'form.js']);
     }
 }
