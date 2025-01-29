@@ -14,7 +14,13 @@ $users           = $userPersistence->fetchAll();
 
 <div class="section">
     <div class="inner">
-        <h2>User center</h2>
+        <h1>User center</h1>
+
+        <div class="selection_buttons">
+            <div class="register selected" onclick="select_register(this)">Register</div>
+            <div class="login" onclick="select_login(this)">Login</div>
+            <div class="password_reset" onclick="select_password_forgot(this)">Password reset</div>
+        </div>
 
         <div class="user_register form">
             <label for="email">
@@ -42,7 +48,7 @@ $users           = $userPersistence->fetchAll();
             <button class="hover_grow" onclick="register_user(this)">Register</button>
         </div>
 
-        <div class="login form">
+        <div class="user_login form hidden">
             <label for="email">
                 email:
                 <span>
@@ -59,6 +65,17 @@ $users           = $userPersistence->fetchAll();
             </label>
 
             <button class="hover_grow" onclick="login_user(this)">Login</button>
+        </div>
+
+        <div class="user_password_reset form hidden">
+            <label for="email">
+                email:
+                <span>
+                    <input type="text" id="forgot_email" value="bruno.bouwman4@gmail.com">
+                </span>
+            </label>
+
+            <button class="hover_grow" onclick="login_user(this)">Send mail</button>
         </div>
 
         <br>
