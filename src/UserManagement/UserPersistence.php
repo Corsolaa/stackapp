@@ -18,12 +18,14 @@ class UserPersistence
                    username,
                    email,
                    password,
-                   created_at
+                   created_at,
+                   modified_at
                    )
             VALUES (
                     '" . SqlHandler::cleanString($this->user->getUsername()) . "',
                     '" . SqlHandler::cleanString($this->user->getEmail()) . "',
                     '" . SqlHandler::cleanString($this->user->getPassword()) . "',
+                    " . time() . ",
                     " . time() . "
                     )";
 
@@ -87,8 +89,8 @@ class UserPersistence
 
     public function updatePassword(): bool
     {
-        $query = "UPDATE users SET password = " . SqlHandler::cleanString($this->user->getPassword()) .
-            " WHERE id = " . $this->user->getId();
+        $query = "UPDATE users SET password = '" . SqlHandler::cleanString($this->user->getPassword()) . "' 
+                    WHERE id = " . $this->user->getId();
         $result = SqlHandler::update($query);
 
         return $result > 0;

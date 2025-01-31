@@ -81,4 +81,20 @@ readonly class UserTokenService
 
         return $this->emailHandler->send($template->getSubject(), $template->getContent());
     }
+
+    public function processUserConfirmPasswordResetToken(User $user, Token $token): bool
+    {
+        $this->tokenPersistence->deleteById($token->getId());
+
+        try {
+            $template = $this->emailTemplateService->renderTemplateByName('user_password_reset_success');
+        } catch (TemplateNotFoundException) {
+            return false;
+        }
+
+        $this->emailHandler->setRecipient($user->getEmail());
+
+        return $this->emailHandler->send($template->getSubject(), $template->getContent());
+    }
+
 }

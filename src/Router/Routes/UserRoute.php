@@ -16,7 +16,7 @@ class UserRoute extends Route {
     {
         Template::getHeader("StackSats ~ User", []);
 
-        echo "User page";
+        require $_SERVER['DOCUMENT_ROOT'] . '/src/Views/user_page.php';
 
         Template::getFooter();
     }

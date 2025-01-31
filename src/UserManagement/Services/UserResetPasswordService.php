@@ -7,7 +7,6 @@ namespace StackSite\UserManagement\Services;
 use StackSite\Core\Api\ApiResponse;
 use StackSite\UserManagement\Token\Token;
 use StackSite\UserManagement\Token\TokenFactory;
-use StackSite\UserManagement\Token\TokenManager;
 use StackSite\UserManagement\Token\TokenPersistence;
 use StackSite\UserManagement\Token\TokenValidator;
 use StackSite\UserManagement\Token\UserTokenService;
@@ -22,8 +21,7 @@ readonly class UserResetPasswordService
         private TokenFactory     $tokenFactory,
         private UserTokenService $userTokenService,
         private TokenPersistence $tokenPersistence,
-        private TokenValidator   $tokenValidator,
-        private TokenManager     $tokenManager
+        private TokenValidator   $tokenValidator
     ) {
     }
 
@@ -43,9 +41,7 @@ readonly class UserResetPasswordService
             return new ApiResponse(false, 'Token error');
         }
 
-        if ($this->tokenManager->checkDuplicateAndExpireToken($passwordToken) === false) {
-            return new ApiResponse(false, 'Token duplicate');
-        }
+        $this->tokenPersistence->deleteAllTokensByUserIdAndType($user->getId(), $passwordToken->getType());
 
         if ($this->userTokenService->processUserPasswordResetToken($user, $passwordToken)) {
             return new ApiResponse(true, 'Token reset successfully');
@@ -73,12 +69,13 @@ readonly class UserResetPasswordService
         }
 
         $user->setPassword($password)->hashPassword();
+        $this->userPersistence->setUser($user);
 
-        $this->userPersistence->setUser($user)->updatePassword();
+        if ($this->userPersistence->updatePassword() === false) {
+            return new ApiResponse(false, 'Failed to update password');
+        }
 
-        $this->tokenPersistence->deleteById($token->getId());
-
-        // TODO send mail that password is reset
+        $this->userTokenService->processUserConfirmPasswordResetToken($user, $token);
 
         return new ApiResponse(true, 'Password reset successfully');
     }

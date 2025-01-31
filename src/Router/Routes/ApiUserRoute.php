@@ -24,11 +24,6 @@ class ApiUserRoute extends Route
             return;
         }
 
-        if (isset($_GET['verify'])) {
-            echo $userController->verifyUser()->toJson();
-            return;
-        }
-
         if (isset($_GET['login'])) {
             echo $userController->loginUser()->toJson();
             return;
@@ -44,16 +39,21 @@ class ApiUserRoute extends Route
             return;
         }
 
-        echo $this->showPreviewPage();
+        $this->showPreviewPage();
     }
 
-    private function showPreviewPage(): string
+    private function showPreviewPage(): void
     {
-        $options = ['register'];
+        $options = [
+            'register',
+            'login',
+            'password_reset',
+            'process_password_reset'
+        ];
         $return  = '<h2>Subscribe page</h2> <br> options: <ul>';
         foreach ($options as $option) {
-            $return .= "<li><a href='/subscribe?$option'>https://app.stacksats.ai/subscribe?$option</a></li>";
+            $return .= "<li><a href='/api/user?$option'>https://app.stacksats.ai/api/user?$option</a></li>";
         }
-        return $return . "</ul>";
+        echo $return . "</ul>";
     }
 }

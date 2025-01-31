@@ -10,7 +10,6 @@ use StackSite\Core\Api\ApiResponse;
 use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Token\Token;
 use StackSite\UserManagement\Token\TokenFactory;
-use StackSite\UserManagement\Token\TokenManager;
 use StackSite\UserManagement\Token\TokenPersistence;
 use StackSite\UserManagement\Token\TokenValidator;
 use StackSite\UserManagement\Token\UserTokenService;
@@ -26,7 +25,6 @@ class UserResetPasswordServiceTest extends TestCase
     private UserTokenService&MockObject $userTokenService;
     private TokenPersistence&MockObject $tokenPersistence;
     private TokenValidator&MockObject $tokenValidator;
-    private TokenManager&MockObject $tokenManager;
     private UserResetPasswordService $userResetPasswordService;
 
     public function setUp(): void
@@ -37,7 +35,6 @@ class UserResetPasswordServiceTest extends TestCase
         $this->userTokenService = $this->createMock(UserTokenService::class);
         $this->tokenPersistence = $this->createMock(TokenPersistence::class);
         $this->tokenValidator = $this->createMock(TokenValidator::class);
-        $this->tokenManager     = $this->createMock(TokenManager::class);
 
         $this->userResetPasswordService = new UserResetPasswordService(
             $this->userValidator,
@@ -45,8 +42,7 @@ class UserResetPasswordServiceTest extends TestCase
             $this->tokenFactory,
             $this->userTokenService,
             $this->tokenPersistence,
-            $this->tokenValidator,
-            $this->tokenManager
+            $this->tokenValidator
         );
 
         parent::setUp();
@@ -54,19 +50,16 @@ class UserResetPasswordServiceTest extends TestCase
 
     public function testSendResetPasswordSuccessfully(): void
     {
-        $this->userValidator->method('hasValidEmail')
+        $this->userValidator->expects($this->once())->method('hasValidEmail')
             ->willReturn(true);
 
-        $this->userPersistence->method('fetchByEmail')
+        $this->userPersistence->expects($this->once())->method('fetchByEmail')
             ->willReturn(new User(1));
 
-        $this->tokenFactory->method('generatePasswordReset')
+        $this->tokenFactory->expects($this->once())->method('generatePasswordReset')
             ->willReturn(new Token);
 
-        $this->tokenManager->method('checkDuplicateAndExpireToken')
-            ->willReturn(true);
-
-        $this->userTokenService->method('processUserPasswordResetToken')
+        $this->userTokenService->expects($this->once())->method('processUserPasswordResetToken')
             ->willReturn(true);
 
         $response = $this->userResetPasswordService->sendResetPassword('test@stacksats.ai');
@@ -121,27 +114,6 @@ class UserResetPasswordServiceTest extends TestCase
         $this->assertEquals('Token error', $response->getMessage());
     }
 
-    public function testSendResetPasswordFailDuplicate(): void
-    {
-        $this->userValidator->method('hasValidEmail')
-            ->willReturn(true);
-
-        $this->userPersistence->method('fetchByEmail')
-            ->willReturn(new User(1));
-
-        $this->tokenFactory->method('generatePasswordReset')
-            ->willReturn(new Token);
-
-        $this->tokenManager->method('checkDuplicateAndExpireToken')
-            ->willReturn(false);
-
-        $response = $this->userResetPasswordService->sendResetPassword('test@stacksats.ai');
-
-        $this->assertInstanceOf(ApiResponse::class, $response);
-        $this->assertFalse($response->getSuccess());
-        $this->assertEquals('Token duplicate', $response->getMessage());
-    }
-
     public function testSendResetPasswordFailProcessToken(): void
     {
         $this->userValidator->method('hasValidEmail')
@@ -152,9 +124,6 @@ class UserResetPasswordServiceTest extends TestCase
 
         $this->tokenFactory->method('generatePasswordReset')
             ->willReturn(new Token);
-
-        $this->tokenManager->method('checkDuplicateAndExpireToken')
-            ->willReturn(true);
 
         $this->userTokenService->method('processUserPasswordResetToken')
             ->willReturn(false);
@@ -168,16 +137,19 @@ class UserResetPasswordServiceTest extends TestCase
 
     public function testProcessResetPasswordTokenSuccessfully(): void
     {
-        $this->tokenPersistence->method('fetchByTokenAndType')
+        $this->tokenPersistence->expects($this->once())->method('fetchByTokenAndType')
             ->willReturn(new Token(id: 1, user_id: 1));
 
-        $this->tokenValidator->method('isExpired')
+        $this->tokenValidator->expects($this->once())->method('isExpired')
             ->willReturn(false);
 
-        $this->userPersistence->method('fetchByUserId')
+        $this->userPersistence->expects($this->once())->method('fetchByUserId')
             ->willReturn(new User(1));
 
-        $this->userValidator->method('hasValidPassword')
+        $this->userValidator->expects($this->once())->method('hasValidPassword')
+            ->willReturn(true);
+
+        $this->userPersistence->expects($this->once())->method('updatePassword')
             ->willReturn(true);
 
         $response = $this->userResetPasswordService->processResetPasswordToken('', '');
@@ -248,5 +220,26 @@ class UserResetPasswordServiceTest extends TestCase
         $this->assertInstanceOf(ApiResponse::class, $response);
         $this->assertFalse($response->getSuccess());
         $this->assertEquals('Incompatible password', $response->getMessage());
+    }
+
+    public function testProcessResetPasswordTokenFailInvalidQuery(): void
+    {
+        $this->tokenPersistence->method('fetchByTokenAndType')
+            ->willReturn(new Token(user_id: 1));
+
+        $this->userPersistence->method('fetchByUserId')
+            ->willReturn(new User(1));
+
+        $this->userValidator->method('hasValidPassword')
+            ->willReturn(true);
+
+        $this->userPersistence->method('updatePassword')
+            ->willReturn(false);
+
+        $response = $this->userResetPasswordService->processResetPasswordToken('', '');
+
+        $this->assertInstanceOf(ApiResponse::class, $response);
+        $this->assertFalse($response->getSuccess());
+        $this->assertEquals('Failed to update password', $response->getMessage());
     }
 }

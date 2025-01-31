@@ -7,9 +7,7 @@ function register_user(button) {
         password: parentElement.querySelector("#register_password").value,
     };
 
-    console.log("Collected Data:", requestBody);
-
-    fetch("https://app.stacksats.ai/api/user?login", {
+    fetch("https://app.stacksats.ai/api/user?register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -32,7 +30,6 @@ function processResult(api_response) {
 
     if (keys_to_check.every(key => Object.hasOwn(api_response, key)) === false) {
         notificationBad(';( Wrong return type, contact support');
-        console.log(api_response);
     }
 
     if (api_response['success']) {

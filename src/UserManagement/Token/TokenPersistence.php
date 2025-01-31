@@ -59,6 +59,15 @@ class TokenPersistence {
         return !empty($result) ? $this->tokenFactory->fromArray($result[0]) : null;
     }
 
+    public function deleteAllTokensByUserIdAndType(int $userId, string $type): void
+    {
+        $query = "DELETE FROM token"
+            . " WHERE user_id = '" . $userId . "'"
+            . " AND type = '" . SqlHandler::cleanString($type) . "'";
+
+        SqlHandler::update($query);
+    }
+
     public function deleteById(int $tokenId): bool
     {
         $query = "DELETE FROM token WHERE id = '" . $tokenId . "'";

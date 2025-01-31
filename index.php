@@ -9,6 +9,8 @@ use StackSite\Core\RequestBodyHandler;
 use StackSite\Router\Router;
 use Dotenv\Dotenv;
 
+session_start();
+
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 

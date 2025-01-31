@@ -33,7 +33,7 @@ readonly class UserController
     public function verifyUser(): ApiResponse
     {
         $token = new Token(
-            token: $_GET['verify'] ?? '',
+            token: $_GET['verify_token'] ?? '',
             type:  Token::VERIFY
         );
 
@@ -56,15 +56,15 @@ readonly class UserController
     {
         $email = $this->requestBody->get('email');
 
-        $this->userResetPasswordService->sendResetPassword((string)$email);
+        return $this->userResetPasswordService->sendResetPassword((string)$email);
 
-        return new ApiResponse(true, 'Password reset successfully');
+        // TODO maybe remove the return and just static send
     }
 
     public function verifyPasswordReset(): ApiResponse
     {
-        $tokenToken    = $this->requestBody->get('token');
-        $password = $this->requestBody->get('password');
+        $tokenToken = $this->requestBody->get('token');
+        $password   = $this->requestBody->get('password');
 
         return $this->userResetPasswordService->processResetPasswordToken(
             (string)$tokenToken,

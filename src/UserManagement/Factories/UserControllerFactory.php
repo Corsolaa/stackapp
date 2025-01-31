@@ -14,7 +14,6 @@ use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\TokenFactory;
-use StackSite\UserManagement\Token\TokenManager;
 use StackSite\UserManagement\Token\TokenPersistence;
 use StackSite\UserManagement\Token\TokenValidator;
 use StackSite\UserManagement\Token\UserTokenService;
@@ -64,8 +63,7 @@ class UserControllerFactory
             $tokenFactory,
             $userTokenService,
             $tokenPersistence,
-            $tokenValidator,
-            new TokenManager($tokenPersistence, $tokenValidator)
+            $tokenValidator
         );
 
         return new UserController(
