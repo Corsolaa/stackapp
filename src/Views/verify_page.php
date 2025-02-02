@@ -1,7 +1,9 @@
 <?php
 
-$good = $_SESSION['verify_good'] ?? false;
-unset($_SESSION['verify_good']);
+use StackSite\UserManagement\Factories\UserControllerFactory;
+
+$userController = UserControllerFactory::create();
+$good           = $userController->verifyUser()->getSuccess();
 
 ?>
 
@@ -10,7 +12,7 @@ unset($_SESSION['verify_good']);
 <p>the verification was:</p>
 
 <?php
-if ($good) {?>
+if ($good) { ?>
     <p style="color: #4ae3ad">✅ SUCCESS ✅</p>
 <?php } else { ?>
     <p style="color: red">❌ failed ❌</p>
@@ -19,11 +21,11 @@ if ($good) {?>
 <p>You will be redirected to the homepage in <span id="countdown">5</span> second(s)...</p>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         let countdownElement = document.getElementById("countdown");
         let countdown = 5;
 
-        let interval = setInterval(function() {
+        let interval = setInterval(function () {
             countdown--;
             countdownElement.textContent = countdown.toString();
 
