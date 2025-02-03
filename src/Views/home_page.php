@@ -19,7 +19,6 @@ $users           = $userPersistence->fetchAll();
         <div class="selection_buttons">
             <div class="register selected" onclick="select_register(this)">Register</div>
             <div class="login" onclick="select_login(this)">Login</div>
-            <div class="password_reset" onclick="select_password_forgot(this)">Password reset</div>
         </div>
 
         <div class="user_register form">
@@ -67,17 +66,6 @@ $users           = $userPersistence->fetchAll();
             <button class="hover_grow" onclick="login_user(this)">Login</button>
         </div>
 
-        <div class="user_password_reset form hidden">
-            <label for="email">
-                email:
-                <span>
-                    <input type="text" id="forgot_email" value="bruno.bouwman4@gmail.com">
-                </span>
-            </label>
-
-            <button class="hover_grow" onclick="login_user(this)">Send mail</button>
-        </div>
-
         <br>
 
         <table>
@@ -98,7 +86,7 @@ $users           = $userPersistence->fetchAll();
                     <td><?php echo $user->getUsername() ?></td>
                     <td><?php echo $user->getEmail() ?></td>
                     <td>********</td>
-                    <td><?php echo $user->getConfirmed() ?></td>
+                    <td><?php echo (int)$user->getConfirmed() ?></td>
                     <td><?php echo date("Y-m-d H:i:s", $user->getCreatedAt()) ?></td>
                     <td><?php echo date("Y-m-d H:i:s", $user->getModifiedAt()) ?></td>
                 </tr>

@@ -21,6 +21,7 @@ class Template
 
             <link rel="stylesheet" href="/assets/css/main.css">
             <link rel="stylesheet" href="/assets/css/animations.css">
+            <link rel="stylesheet" href="/assets/css/form.css">
             <?php
             foreach ($customCss as $css) {
                 echo '<link rel="stylesheet" href="/assets/css/' . htmlspecialchars($css) . '">';
@@ -48,6 +49,7 @@ class Template
 
         <script src="/assets/js/script.js"></script>
         <script src="/assets/js/util.js"></script>
+        <script src="/assets/js/form.js"></script>
         <script src="/assets/js/notification.js"></script>
         <?php
         foreach ($customJs as $js) {

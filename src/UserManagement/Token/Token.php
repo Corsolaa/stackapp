@@ -8,7 +8,7 @@ class Token
 {
     const string VERIFY = 'verify_user';
     const string PASSWORD = 'password_reset';
-    const string LOGIN = 'login_user';
+    const string API = 'api_user';
 
     public function __construct(
         private readonly ?int   $id = null,
@@ -17,8 +17,7 @@ class Token
         private readonly string $type = '',
         private readonly int    $expires_at = 0,
         private readonly int    $created_at = 0
-    )
-    {
+    ) {
     }
 
     public function getId(): int

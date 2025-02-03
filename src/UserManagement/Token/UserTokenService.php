@@ -55,13 +55,6 @@ readonly class UserTokenService
         return $this->emailHandler->send($template->getSubject(), $template->getContent());
     }
 
-    public function processUserLoginToken(Token $token): bool
-    {
-        $result = $this->tokenPersistence->setToken($token)
-            ->upload();
-        return $result > 0;
-    }
-
     public function processUserPasswordResetToken(User $user, Token $token): bool
     {
         $this->tokenPersistence

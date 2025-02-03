@@ -1,13 +1,12 @@
-function register_user(button) {
+function password_reset(button) {
     const parentElement = button.parentElement;
 
     const requestBody = {
-        email: parentElement.querySelector("#register_email").value,
-        username: parentElement.querySelector("#register_username").value,
-        password: parentElement.querySelector("#register_password").value,
+        password: parentElement.querySelector("#forgot_password").value,
+        token: parentElement.querySelector("#forgot_token").value,
     };
 
-    fetch("https://app.stacksats.ai/api/user?register", {
+    fetch("https://app.stacksats.ai/api/user?process_password_reset", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -24,7 +23,7 @@ function register_user(button) {
         });
 
     function processResult(api_response) {
-        const keys_to_check = ['success', 'message'];
+        const keys_to_check = ['success', 'data'];
 
         if (keys_to_check.every(key => Object.hasOwn(api_response, key)) === false) {
             notificationBad(';( Wrong return type, contact support');

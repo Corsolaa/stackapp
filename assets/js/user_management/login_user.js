@@ -18,7 +18,6 @@ function login_user(button) {
         })
         .then(result => {
             if (processResult(result) === false) {
-                console.log('hello');
                 shake(button);
             }
         });
@@ -31,11 +30,40 @@ function login_user(button) {
         }
 
         if (api_response['success']) {
-            notificationGood('login as successful');
+            window.location.href = '/user';
             return true;
         } else {
             notificationBad('Login failed 🥲');
             return false;
         }
     }
+}
+
+function request_password_reset(button) {
+    const parentElement = button.parentElement;
+    const valueElement = parentElement.querySelector("#login_email");
+
+    if (checkContainerHasValue(valueElement) === false) {
+        shake(button)
+        notificationBad('Please fill in the red container')
+        return;
+    }
+
+    const requestBody = {
+        email: valueElement.value
+    };
+
+    fetch("https://app.stacksats.ai/api/user?password_reset", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(result => {
+            notificationInfo('If account is present, password reset link is send to email');
+        });
 }

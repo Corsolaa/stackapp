@@ -8,11 +8,6 @@ function select_login(button) {
     select_form(button.parentElement.parentElement, 'user_login');
 }
 
-function select_password_forgot(button) {
-    select_button('password_reset');
-    select_form(button.parentElement.parentElement, 'user_password_reset');
-}
-
 function select_button(button_class) {
     const button_selection = document.querySelector('.selection_buttons');
     const buttons = button_selection.querySelectorAll('div');

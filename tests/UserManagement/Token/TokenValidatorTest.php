@@ -20,7 +20,7 @@ class TokenValidatorTest extends TestCase
 
     public function testIsExpired()
     {
-        $token  = new Token(expires_at: time() - 1);
+        $token  = new Token(expires_at: time() - 100);
         $result = $this->tokenValidator->isExpired($token);
 
         $this->assertTrue($result);
@@ -28,9 +28,10 @@ class TokenValidatorTest extends TestCase
 
     public function testIsNotExpired()
     {
-        $token  = new Token(expires_at: time() + 1);
+        $token  = new Token(expires_at: time() + 100);
         $result = $this->tokenValidator->isExpired($token);
 
         $this->assertFalse($result);
+
     }
 }

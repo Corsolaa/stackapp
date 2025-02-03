@@ -8,9 +8,6 @@ class TokenValidator
 {
     public function isExpired(Token $token): bool
     {
-        if ($token->getExpiresAt() < time()) {
-            return true;
-        }
-        return false;
+        return $token->getExpiresAt() < time();
     }
 }

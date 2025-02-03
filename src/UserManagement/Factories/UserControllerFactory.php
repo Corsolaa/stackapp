@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace StackSite\UserManagement\Factories;
 
+use StackSite\Core\Http\SessionHub;
 use StackSite\Core\Mailing\Template\EmailTemplateFactory;
 use StackSite\Core\Mailing\Template\EmailTemplateService;
 use StackSite\Core\Mailing\Template\TemplatePersistence;
@@ -25,10 +26,10 @@ class UserControllerFactory
 {
     public static function create(): UserController
     {
-        $requestBodyHandler = new RequestBodyHandler();
-        $userPersistence = new UserPersistence();
-        $tokenFactory = new TokenFactory();
-        $tokenValidator = new TokenValidator();
+        $requestBodyHandler   = new RequestBodyHandler();
+        $userPersistence      = new UserPersistence();
+        $tokenFactory         = new TokenFactory();
+        $tokenValidator       = new TokenValidator();
         $emailTemplateService = new EmailTemplateService(
             new TemplateRenderer(),
             new TemplatePersistence(
@@ -37,8 +38,8 @@ class UserControllerFactory
         );
 
         $tokenPersistence = new TokenPersistence($tokenFactory);
-        $userValidator = new UserValidator($userPersistence);
-        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService, $userPersistence);
+        $userValidator    = new UserValidator($userPersistence);
+        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService);
 
         $userRegistrationService = new UserRegistrationService(
             $userValidator,
@@ -46,17 +47,19 @@ class UserControllerFactory
             $tokenFactory,
             $userTokenService
         );
+
         $userLoginService = new UserLoginService(
             $userValidator,
             $userPersistence,
-            $tokenFactory,
-            $userTokenService
+            new SessionHub()
         );
+
         $userVerifyService = new UserVerifyService(
             $tokenPersistence,
             $userPersistence,
             $userTokenService
         );
+
         $userResetPasswordService = new UserResetPasswordService(
             $userValidator,
             $userPersistence,

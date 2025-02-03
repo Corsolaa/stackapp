@@ -37,15 +37,15 @@ class TokenFactory
         }
     }
 
-    public function generateLoginUser(int $userId): ?Token
+    public function generateApiToken(int $userId): ?Token
     {
         try {
             return new Token(
                 null,
                 $userId,
                 bin2hex(random_bytes(16)),
-                TOKEN::LOGIN,
-                0
+                TOKEN::API,
+                (time() + (90 * 24 * 60 * 60))
             );
         } catch (RandomException) {
             return null;

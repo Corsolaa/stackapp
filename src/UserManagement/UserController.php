@@ -33,7 +33,7 @@ readonly class UserController
     public function verifyUser(): ApiResponse
     {
         $token = new Token(
-            token: $_GET['verify_token'] ?? '',
+            token: $_GET['verify'] ?? '',
             type:  Token::VERIFY
         );
 

@@ -23,8 +23,7 @@ class HomeRoute extends Route
             [
                 'user_management/register_user.js',
                 'user_management/login_user.js',
-                'user_management/user_form_selector.js',
-                'form.js'
+                'user_management/user_form_selector.js'
             ]
         );
     }
