@@ -23,7 +23,7 @@ function login_user(button) {
         });
 
     function processResult(api_response) {
-        const keys_to_check = ['success', 'data'];
+        const keys_to_check = ['success'];
 
         if (keys_to_check.every(key => Object.hasOwn(api_response, key)) === false) {
             notificationBad(';( Wrong return type, contact support');

@@ -6,15 +6,18 @@ namespace StackSite\Core\Http;
 
 class SessionHub
 {
-    public static function loginUser(int $user_id): void
+    public static function loginUser(string $token): void
     {
-        $_SESSION['logged_in'] = true;
-        $_SESSION['user_id']   = $user_id;
+        $_SESSION['token'] = $token;
     }
 
     public static function logout(): void
     {
-        unset($_SESSION['logged_in']);
-        unset($_SESSION['user_id']);
+        unset($_SESSION['token']);
+    }
+
+    public static function getToken(): ?string
+    {
+        return $_SESSION['token'] ?? null;
     }
 }

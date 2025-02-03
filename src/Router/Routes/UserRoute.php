@@ -5,7 +5,7 @@ namespace StackSite\Router\Routes;
 use StackSite\Core\Http\SessionHub;
 use StackSite\Core\Template;
 use StackSite\Router\Route;
-use StackSite\UserManagement\UserPersistence;
+use StackSite\UserManagement\Factories\UserControllerFactory;
 
 class UserRoute extends Route
 {
@@ -30,6 +30,13 @@ class UserRoute extends Route
 
 
             case isset($_GET['login']):
+                $user = (UserControllerFactory::create())->getUserBySessionToken();
+
+                if ($user != null) {
+                    header("Location: /user");
+                    return;
+                }
+
                 Template::getHeader("StackSats ~ Login", []);
                 require $_SERVER['DOCUMENT_ROOT'] . '/src/Views/login_page.php';
                 Template::getFooter(
@@ -42,15 +49,18 @@ class UserRoute extends Route
 
 
             case isset($_GET['logout']):
+                SessionHub::logout();
                 header("Location: /");
                 break;
 
+
             default:
-                if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-                    $user = (new UserPersistence)->fetchByUserId($_SESSION['user_id']);
+                if (SessionHub::getToken() !== null) {
+                    $user = (UserControllerFactory::create())->getUserBySessionToken();
 
                     if ($user === null) {
                         SessionHub::logout();
+                        header("Location: /user?login");
                         return;
                     }
 

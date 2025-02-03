@@ -1,9 +1,8 @@
 <?php
 
-use StackSite\UserManagement\UserPersistence;
+use StackSite\UserManagement\Factories\UserControllerFactory;
 
-$userPersistence = new UserPersistence();
-$user            = $userPersistence->fetchByUserId($_SESSION['user_id']);
+$user = (UserControllerFactory::create())->getUserBySessionToken();
 
 ?>
 

@@ -8,10 +8,10 @@ class Token
 {
     const string VERIFY = 'verify_user';
     const string PASSWORD = 'password_reset';
-    const string API = 'api_user';
+    const string LOGIN = 'login_user';
 
     public function __construct(
-        private readonly ?int   $id = null,
+        private ?int            $id = null,
         private readonly ?int   $user_id = null,
         private readonly string $token = '',
         private readonly string $type = '',
@@ -20,9 +20,15 @@ class Token
     ) {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getUserId(): int

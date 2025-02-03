@@ -32,32 +32,36 @@ class UserControllerFactory
         $tokenValidator       = new TokenValidator();
         $emailTemplateService = new EmailTemplateService(
             new TemplateRenderer(),
-            new TemplatePersistence(
-                new EmailTemplateFactory()
-            )
+            new TemplatePersistence(new EmailTemplateFactory()),
         );
 
         $tokenPersistence = new TokenPersistence($tokenFactory);
         $userValidator    = new UserValidator($userPersistence);
-        $userTokenService = new UserTokenService($tokenPersistence, $emailTemplateService);
+        $userTokenService = new UserTokenService(
+            $tokenPersistence,
+            $emailTemplateService,
+            $tokenValidator,
+            $userPersistence,
+        );
 
         $userRegistrationService = new UserRegistrationService(
             $userValidator,
             $userPersistence,
             $tokenFactory,
-            $userTokenService
+            $userTokenService,
         );
 
         $userLoginService = new UserLoginService(
             $userValidator,
             $userPersistence,
-            new SessionHub()
+            $tokenPersistence,
+            $tokenFactory,
         );
 
         $userVerifyService = new UserVerifyService(
             $tokenPersistence,
             $userPersistence,
-            $userTokenService
+            $userTokenService,
         );
 
         $userResetPasswordService = new UserResetPasswordService(
@@ -66,7 +70,7 @@ class UserControllerFactory
             $tokenFactory,
             $userTokenService,
             $tokenPersistence,
-            $tokenValidator
+            $tokenValidator,
         );
 
         return new UserController(
@@ -74,7 +78,8 @@ class UserControllerFactory
             $userRegistrationService,
             $userVerifyService,
             $userLoginService,
-            $userResetPasswordService
+            $userResetPasswordService,
+            $userTokenService,
         );
     }
 }

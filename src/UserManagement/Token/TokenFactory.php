@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StackSite\UserManagement\Token;
 
 use Random\RandomException;
+use StackSite\Core\Http\SessionHub;
 
 class TokenFactory
 {
@@ -37,19 +38,24 @@ class TokenFactory
         }
     }
 
-    public function generateApiToken(int $userId): ?Token
+    public function generateLoginUser(int $userId): ?Token
     {
         try {
             return new Token(
                 null,
                 $userId,
                 bin2hex(random_bytes(16)),
-                TOKEN::API,
+                TOKEN::LOGIN,
                 (time() + (90 * 24 * 60 * 60))
             );
         } catch (RandomException) {
             return null;
         }
+    }
+
+    public static function generateTokenFromLoginSession(): Token
+    {
+        return new Token(token: SessionHub::getToken(), type:Token::LOGIN);
     }
 
     public function fromArray(array $data): Token

@@ -12,6 +12,8 @@ use StackSite\UserManagement\Services\UserRegistrationService;
 use StackSite\UserManagement\Services\UserResetPasswordService;
 use StackSite\UserManagement\Services\UserVerifyService;
 use StackSite\UserManagement\Token\Token;
+use StackSite\UserManagement\Token\TokenFactory;
+use StackSite\UserManagement\Token\UserTokenService;
 
 readonly class UserController
 {
@@ -20,7 +22,8 @@ readonly class UserController
         private UserRegistrationService  $userRegistrationService,
         private UserVerifyService        $userVerifyService,
         private UserLoginService         $userLoginService,
-        private UserResetPasswordService $userResetPasswordService
+        private UserResetPasswordService $userResetPasswordService,
+        private UserTokenService         $userTokenService,
     ) {
     }
 
@@ -70,5 +73,10 @@ readonly class UserController
             (string)$tokenToken,
             (string)$password
         );
+    }
+
+    public function getUserBySessionToken(): ?User
+    {
+        return $this->userTokenService->getUserByToken(TokenFactory::generateTokenFromLoginSession());
     }
 }

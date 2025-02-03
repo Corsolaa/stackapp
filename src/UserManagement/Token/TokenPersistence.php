@@ -6,15 +6,13 @@ namespace StackSite\UserManagement\Token;
 
 use StackSite\Core\SqlHandler;
 
-class TokenPersistence {
-    private Token $token;
-
+readonly class TokenPersistence {
     public function __construct(
-        private readonly TokenFactory $tokenFactory
+        private TokenFactory $tokenFactory
     ) {
     }
 
-    public function upload(): int
+    public function upload(Token $token): void
     {
         $query =
             "INSERT INTO token (
@@ -25,14 +23,14 @@ class TokenPersistence {
                    created_at
                    ) 
                   VALUES (
-                          '" . $this->token->getUserId() . "',
-                          '" . SqlHandler::cleanString($this->token->getToken()) . "',
-                          '" . SqlHandler::cleanString($this->token->getType()) . "',
-                          '" . $this->token->getExpiresAt() . "',
+                          '" . $token->getUserId() . "',
+                          '" . SqlHandler::cleanString($token->getToken()) . "',
+                          '" . SqlHandler::cleanString($token->getType()) . "',
+                          '" . $token->getExpiresAt() . "',
                           " . time() . "
                           )";
 
-        return SqlHandler::insert($query);
+        $token->setId(SqlHandler::insert($query));
     }
 
     public function fetchByTokenAndType(Token $token): ?Token
@@ -75,12 +73,5 @@ class TokenPersistence {
         $result = SqlHandler::update($query);
 
         return $result > 0;
-    }
-
-
-    public function setToken(Token $token): self
-    {
-        $this->token = $token;
-        return $this;
     }
 }
