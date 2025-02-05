@@ -81,7 +81,7 @@ class UserPersistence
 
     public function confirmUser(): bool
     {
-        $query = "UPDATE users SET confirmed = 1 WHERE id = " . $this->user->getId();
+        $query  = "UPDATE users SET confirmed = 1 WHERE id = " . $this->user->getId();
         $result = SqlHandler::update($query);
 
         return $result > 0;
@@ -89,8 +89,9 @@ class UserPersistence
 
     public function updatePassword(): bool
     {
-        $query = "UPDATE users SET password = '" . SqlHandler::cleanString($this->user->getPassword()) . "' 
-                    WHERE id = " . $this->user->getId();
+        $query  = "UPDATE users SET password = '" . SqlHandler::cleanString($this->user->getPassword()) . "',
+                    modified_at = " . time() . "
+                        WHERE id = " . $this->user->getId();
         $result = SqlHandler::update($query);
 
         return $result > 0;

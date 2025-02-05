@@ -2,6 +2,7 @@
 
 namespace StackSite\Router\Routes;
 
+use DeviceDetector\DeviceDetector;
 use StackSite\Core\Http\SessionHub;
 use StackSite\Core\Template;
 use StackSite\Router\Route;
@@ -30,6 +31,28 @@ class UserRoute extends Route
 
 
             case isset($_GET['login']):
+//                $userAgent = $_SERVER['HTTP_USER_AGENT'];
+//                $dd = new DeviceDetector($userAgent);
+//                $dd->parse();
+//
+//                $clientInfo = $dd->getClient();    // Informatie over browser, feed reader, media player, etc.
+//                $osInfo = $dd->getOs();            // Informatie over het besturingssysteem
+//                $device = $dd->getDeviceName();    // Naam van het apparaat
+//                $brand = $dd->getBrandName();      // Merk van het apparaat
+//                $model = $dd->getModel();          // Model van het apparaat
+//
+//                $deviceInfo = [
+//                    'Browser/Client'     => $clientInfo,
+//                    'Besturingssysteem'  => $osInfo,
+//                    'Apparaatnaam'       => $device,
+//                    'Merk'               => $brand,
+//                    'Model'              => $model
+//                ];
+//
+//                echo "<pre>";
+//                var_dump($deviceInfo);
+//                echo "</pre>";
+
                 $user = (UserControllerFactory::create())->getUserBySessionToken();
 
                 if ($user != null) {
@@ -55,7 +78,7 @@ class UserRoute extends Route
 
 
             default:
-                if (SessionHub::getToken() !== null) {
+                if (SessionHub::getToken() !== '') {
                     $user = (UserControllerFactory::create())->getUserBySessionToken();
 
                     if ($user === null) {

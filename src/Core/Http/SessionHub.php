@@ -16,8 +16,8 @@ class SessionHub
         unset($_SESSION['token']);
     }
 
-    public static function getToken(): ?string
+    public static function getToken(): string
     {
-        return $_SESSION['token'] ?? null;
+        return $_SESSION['token'] ?? '';
     }
 }

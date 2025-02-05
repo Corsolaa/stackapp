@@ -17,3 +17,7 @@ $user = (UserControllerFactory::create())->getUserBySessionToken();
 <p>confirmed: <?php echo (int)$user->getConfirmed(); ?></p>
 <p>created_at: <?php echo $user->getCreatedAt() ?></p>
 <p>modified_at: <?php echo $user->getModifiedAt() ?></p>
+
+<br><br>
+
+<a href="https://app.stacksats.ai/user?logout">logout</a>
